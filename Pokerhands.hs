@@ -2,43 +2,31 @@ module Pokerhands where
 -- TODO: exports
 
 import Data.Char
+import Data.Maybe
 
 data Card = Card Suit Int
           deriving (Eq)
 
 data Suit = Clubs | Diamonds | Hearts | Spades
           deriving (Eq)
-                   
+
+suitChars = [(Clubs, 'C'), (Diamonds, 'D'), (Hearts, 'H'), (Spades, 'S')]
+valueChars = [(n, intToDigit n) | n <- [2..9]] ++ [(10, 'T'), (11, 'J'), (12, 'Q'), (13, 'K'), (14, 'A')]
+
 instance Show Suit where
-  show Clubs = "C"
-  show Diamonds = "D"
-  show Hearts = "H"
-  show Spades = "S"
+  show suit = [fromJust $ lookup suit suitChars]
 
 instance Show Card where
-  show (Card suit value) = valueString value ++ show suit
-    where valueString n | n >= 2 && n <= 9 = show n
-                        | n == 10 = "T"
-                        | n == 11 = "J"
-                        | n == 12 = "Q"
-                        | n == 13 = "K"
-                        | n == 14 = "A"
-  
+  show (Card suit value) = fromJust (lookup value valueChars) : show suit
+
+
 parseCard :: String -> Maybe Card
-parseCard [value, suit] | value `elem` ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'] && suit `elem` ['C', 'D', 'H', 'S'] = Just (Card (parseSuit suit) (parseValue value))
-                        | otherwise = Nothing
+parseCard [v, s] | v `elem` legalValues && s `elem` legalSuits = Just (Card suit value)
+  where rlookup x = lookup x . map swap
+        swap (x, y) = (y, x)
+        (_, legalSuits) = unzip suitChars
+        (_, legalValues) = unzip valueChars
+        suit = fromJust $ rlookup s suitChars
+        value = fromJust $ rlookup v valueChars
 parseCard _ = Nothing
 
-parseValue :: Char -> Int
-parseValue 'T' = 10
-parseValue 'J' = 11
-parseValue 'Q' = 12
-parseValue 'K' = 13
-parseValue 'A' = 14
-parseValue c = digitToInt c
-
-parseSuit :: Char -> Suit
-parseSuit 'C' = Clubs
-parseSuit 'D' = Diamonds
-parseSuit 'H' = Hearts
-parseSuit 'S' = Spades
