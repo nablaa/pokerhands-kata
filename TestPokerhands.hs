@@ -2,6 +2,7 @@ module TestPokerhands where
 
 import Pokerhands
 import Test.HUnit
+import Data.Maybe
 
 show_tests = [
   ("Hearts 4", "4H", Card Hearts 4),
@@ -16,7 +17,10 @@ show_tests = [
 make_show_test :: (String, String, Card) -> Test
 make_show_test (name, expected, card) = TestCase (assertEqual ("Testing 'show' (" ++ name ++ ")") expected (show card))
 
-tests = TestList (map make_show_test show_tests)
+make_read_test :: (String, String, Card) -> Test
+make_read_test (name, input, expected) = TestCase (assertEqual ("Testing 'read' (" ++ name ++ ")") expected (fromJust (parseCard input)))
+
+tests = TestList (map make_show_test show_tests ++ map make_read_test show_tests)
 
 
 main = do runTestTT tests
