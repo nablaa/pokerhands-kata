@@ -1,5 +1,4 @@
-module Pokerhands where
--- TODO: exports
+module Pokerhands (Card(..), Suit(..), parseCard) where
 
 import Data.Char
 import Data.Maybe
