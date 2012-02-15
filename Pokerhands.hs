@@ -14,4 +14,10 @@ instance Show Suit where
   show Spades = "S"
 
 instance Show Card where
-  show (Card suit value) = undefined
+  show (Card suit value) = valueString value ++ show suit
+    where valueString n | n >= 2 && n <= 9 = show n
+                        | n == 10 = "T"
+                        | n == 11 = "J"
+                        | n == 12 = "Q"
+                        | n == 13 = "K"
+                        | n == 14 = "A"
