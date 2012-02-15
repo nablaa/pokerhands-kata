@@ -14,13 +14,12 @@ show_tests = [
   ("Spades Ace", "AS", Card Spades 14)
   ]
 
-make_show_test :: (String, String, Card) -> Test
-make_show_test (name, expected, card) = TestCase (assertEqual ("Testing 'show' (" ++ name ++ ")") expected (show card))
+make_test :: (Show a, Eq a) => [Char] -> a -> a -> Test
+make_test name expected actual = TestCase (assertEqual ("Testing 'show' (" ++ name ++ ")") expected actual)
 
-make_read_test :: (String, String, Card) -> Test
-make_read_test (name, input, expected) = TestCase (assertEqual ("Testing 'read' (" ++ name ++ ")") expected (fromJust (parseCard input)))
+make_show_test (name, expected, card) = make_test name expected (show card)
+make_read_test (name, input, expected) = make_test name expected (fromJust (parseCard input))
 
 tests = TestList (map make_show_test show_tests ++ map make_read_test show_tests)
-
 
 main = do runTestTT tests
