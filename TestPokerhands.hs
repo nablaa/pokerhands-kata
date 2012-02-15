@@ -1,6 +1,7 @@
 module TestPokerhands where
 
 import Pokerhands
+import Card
 import Test.HUnit
 import Data.Maybe
 
