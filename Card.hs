@@ -3,7 +3,7 @@ module Card (Card(..), Suit(..), parseCard) where
 import Data.Char
 import Data.Maybe
 
-data Card = Card Suit Int
+data Card = Card { suit :: Suit, value :: Int }
           deriving (Eq)
 
 data Suit = Clubs | Diamonds | Hearts | Spades
