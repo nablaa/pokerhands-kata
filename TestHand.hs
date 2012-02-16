@@ -40,6 +40,24 @@ highest_card_tests = [
 make_highest_card_test :: (String, Int, String) -> Test
 make_highest_card_test (name, expected, input) = TestCase (assertEqual name expected (highestCardValue (fromJust (parseHand input))))
 
+
+hand_rank_tests = [
+    ("Highest card", HighCard, "4H 9C KS JC 8S")
+  , ("Pair", Pair, "4H 9C KS 4S 8S")
+  , ("Two pairs", TwoPairs, "4H 9C KS 4S 9S")
+  , ("Three of a kind", ThreeKind, "4H 9C 4S 4D JC")
+  , ("Straight", Straight, "4H 5S 6D 7H 8D")
+  , ("Flush", Flush, "4S 8S 2S 9S AS")
+  , ("Full house", FullHouse, "6H 6S 2H 2S 2C")
+  , ("Four of a kind", FourKind, "6H 2D 2H 2S 2C")
+  , ("Straight flush", StraightFlush, "8H 9H TH JH QH")
+  ]
+
+make_rank_test :: (String, HandRank, String) -> Test
+make_rank_test (name, expected, input) = TestCase (assertEqual name expected (getHandRank (fromJust (parseHand input))))
+
 hand_tests = map (uncurry make_parse_test) show_tests
           ++ map (uncurry make_parse_test_failing) show_tests_failing
           ++ map make_highest_card_test highest_card_tests
+          ++ map make_rank_test hand_rank_tests
+
