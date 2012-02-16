@@ -16,4 +16,7 @@ makeHand :: [Card] -> Maybe Hand
 makeHand cards | length cards /= 5 = Nothing
 makeHand cards = Just $ Hand cards
 
+highestCardValue :: Hand -> Int
+highestCardValue (Hand cards) = maximum $ map value cards
+
 
