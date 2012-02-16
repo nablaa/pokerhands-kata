@@ -16,7 +16,8 @@ show_tests_failing = [
   ("Parse illegal card", "4H JC 1S KD 2S"),
   ("Parse illegal card", "4H JC 1S KD 1S"),
   ("Parse illegal input", "breakingTheTestForFun"),
-  ("Parse empty input", "")
+  ("Parse empty input", ""),
+  ("Parse hand with two identical cards", "6S AS JC 6S 5H")
   ]
 
 make_parse_test :: String -> String -> Test
@@ -27,7 +28,7 @@ make_parse_test_failing name str = TestCase (assertEqual name Nothing (parseHand
 
 
 highest_card_tests = [
-    ("Highest card", 2, "2H 2C 2S 2D 2H")
+    ("Highest card", 3, "2H 2C 3S 2D 2S")
   , ("Highest card", 8, "2H 5C 3D 7C 8H")
   , ("Highest card", 10, "4H 5C TD 7C 8H")
   , ("Highest card", 11, "4H JC TD 7C 8H")

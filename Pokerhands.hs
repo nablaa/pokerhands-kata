@@ -13,7 +13,7 @@ parseHand :: String -> Maybe Hand
 parseHand cardStrings = sequence (map parseCard (words cardStrings)) >>= makeHand
 
 makeHand :: [Card] -> Maybe Hand
-makeHand cards | length cards /= 5 = Nothing
+makeHand cards | length cards /= 5 || length cards /= length (nub cards) = Nothing
 makeHand cards = Just $ Hand cards
 
 highestCardValue :: Hand -> Int
