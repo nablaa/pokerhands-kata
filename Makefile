@@ -15,5 +15,5 @@ doc:
 	hlint . --report
 
 clean:
-	rm -rf doc ${PROG} *.o *.tix *.hi .hpc
+	rm -rf doc ${PROG} *.o *.tix *.hi .hpc *.html
 
