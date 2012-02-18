@@ -1,4 +1,4 @@
-module Pokerhands where
+module Pokerhands (Hand(..), HandRank(..), parseHand, highestCardValue, getHandRank) where
 
 import Card
 import Data.List
