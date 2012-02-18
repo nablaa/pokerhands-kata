@@ -11,13 +11,9 @@ hpc: run_tests
 	hpc markup ${PROG} --exclude=Main
 
 doc:
-	touch doc
-	rm -rf doc
 	haddock -o doc -h *.hs
 	hlint . --report
 
 clean:
-	rm ${PROG}
-	rm *.o
-	rm *.tix
+	rm -rf doc ${PROG} *.o *.tix *.hi .hpc
 
