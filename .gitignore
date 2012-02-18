@@ -1,3 +1,7 @@
 *.hs~
+*.hi
 *.swp
 *.swo
+*.tix
+*.o
+*.hpc
