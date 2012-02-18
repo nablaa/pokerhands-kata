@@ -122,7 +122,7 @@ hand_comparison_tests = [
   -- Straight flush
   , ("Straight flush, against four of a kind", GT, "4S 5S 6S 7S 8S", "AC AD AH AS KC")
   , ("Straight flush, highest card", GT, "4S 5S 6S 7S 8S", "3S 4S 5S 6S 7S")
-  , ("Straight flush, tie", GT, "4S 5S 6S 7S 8S", "4S 5S 6S 7S 8S")
+  , ("Straight flush, tie", EQ, "4S 5S 6S 7S 8S", "4S 5S 6S 7S 8S")
   ]
 
 

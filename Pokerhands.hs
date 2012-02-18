@@ -14,7 +14,14 @@ instance Show Hand where
   show (Hand cards) = intercalate " " (map show cards)
 
 instance Ord Hand where
-  compare h1 h2 = undefined
+  compare hand1 hand2 = case comparison of
+                       EQ -> rankCompare rank (handValues hand1) (handValues hand2)
+                       _  -> comparison
+    where comparison = compare (getHandRank hand1) (getHandRank hand2)
+          rank = getHandRank hand1
+
+handValues :: Hand -> [Int]
+handValues (Hand cards) = map value cards
 
 parseHand :: String -> Maybe Hand
 parseHand cardStrings = sequence (map parseCard (words cardStrings)) >>= makeHand
@@ -54,4 +61,38 @@ contains (Hand cards) TwoPairs = sort (M.elems histogram) == [1, 2, 2]
 contains (Hand cards) FullHouse = sort (M.elems histogram) == [2, 3]
   where values = map value cards
         histogram = M.fromListWith (+) $ zip values (repeat 1)
+
+rankCompare :: HandRank -> [Int] -> [Int] -> Ordering
+rankCompare HighCard values1 values2 = compareHighestValues values1 values2
+rankCompare Pair values1 values2 = compareKinds 2 values1 values2
+rankCompare TwoPairs values1 values2 = compareKinds 2 values1 values2
+rankCompare ThreeKind values1 values2 = compareKinds 3 values1 values2
+rankCompare Straight values1 values2 = compare (maximum values1) (maximum values2)
+rankCompare Flush values1 values2 = compareHighestValues values1 values2
+rankCompare FullHouse values1 values2 = compareKinds 3 values1 values2
+rankCompare FourKind values1 values2 = compareKinds 4 values1 values2
+rankCompare StraightFlush values1 values2 = compareHighestValues values1 values2
+
+compareKinds :: Int -> [Int] -> [Int] -> Ordering
+compareKinds kind values1 values2 = case comparison of
+                                         EQ -> compareHighestValues (remaining values1) (remaining values2)
+                                         _  -> comparison
+  where kindValues values = nKindValues kind values
+        remaining values = nub values \\ kindValues values
+        comparison = compareHighestValues (kindValues values1) (kindValues values2)
+
+compareHighestValues :: [Int] -> [Int] -> Ordering
+compareHighestValues l1 l2 = compareHighestValues' (reverse (sort l1)) (reverse (sort l2))
+
+compareHighestValues' :: [Int] -> [Int] -> Ordering
+compareHighestValues' [] [] = EQ
+compareHighestValues' (x:xs) (y:ys) | x < y = LT
+                                    | x > y = GT
+                                    | otherwise = compareHighestValues' xs ys
+
+nKindValues :: Int -> [Int] -> [Int]
+nKindValues kind list = nub $ fst $ partition (\x -> elemCount x list == kind) list
+
+elemCount :: Eq a => a -> [a] -> Int
+elemCount val list = length $ elemIndices val list
 
