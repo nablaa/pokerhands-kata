@@ -13,6 +13,9 @@ data HandRank = HighCard | Pair | TwoPairs | ThreeKind | Straight | Flush | Full
 instance Show Hand where
   show (Hand cards) = intercalate " " (map show cards)
 
+instance Ord Hand where
+  compare h1 h2 = undefined
+
 parseHand :: String -> Maybe Hand
 parseHand cardStrings = sequence (map parseCard (words cardStrings)) >>= makeHand
 
